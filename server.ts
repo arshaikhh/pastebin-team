@@ -29,7 +29,7 @@ const client = new Client(dbConfig);
 client.connect();
 
 app.get("/", async (req, res) => {
-  const dbres = await client.query('select * from pasteData limit 10');
+  const dbres = await client.query('select * from pastedata limit 10');
   res.json(dbres.rows);
   
 });
@@ -37,8 +37,8 @@ app.get("/", async (req, res) => {
 app.post("/", async (req,res)=> {
   try {
     const input = req.body
-    const dbres = await client.query('insert into pasteData(title,name,creation_date) values($1,$2,$3) returning *',[input.title,input.data,input.creationDate])
-    console.log(input.data)
+    const dbres = await client.query('insert into pastedata(title,data,creation_date) values($1,$2,$3) returning *',[input.title,input.data,input.creationDate])
+    console.log(input.data,input.title,input.creationDate)
     res.json(dbres.rows[0])
   }
   catch(err) {
