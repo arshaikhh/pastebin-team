@@ -35,9 +35,15 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/", async (req,res)=> {
-  const input = req.body
-  const dbres = await client.query('insert into categories(name) values($1)',["what's up"])
-  res.json(dbres.rows)
+  try {
+    const input = req.body
+    const dbres = await client.query('insert into categories(name) values($1) returning *',[input])
+    res.json(dbres.rows[0])
+  }
+  catch(err) {
+    console.error(err.message)
+  }
+  
 })
 
 //Start the server on the given port
