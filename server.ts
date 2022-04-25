@@ -37,7 +37,7 @@ app.get("/", async (req, res) => {
 app.post("/", async (req,res)=> {
   try {
     const input = req.body
-    const dbres = await client.query('insert into categories(name) values($1) returning *',[input])
+    const dbres = await client.query('insert into categories(name) values($1) returning *',[input.name])
     res.json(dbres.rows[0])
   }
   catch(err) {
