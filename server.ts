@@ -31,8 +31,20 @@ client.connect();
 app.get("/", async (req, res) => {
   const dbres = await client.query('select * from categories');
   res.json(dbres.rows);
+  
 });
 
+app.post("/", async (req,res)=> {
+  try {
+    const input = req.body
+    const dbres = await client.query('insert into categories(name) values($1) returning *',[input.name])
+    res.json(dbres.rows[0])
+  }
+  catch(err) {
+    console.error(err.message)
+  }
+  
+})
 
 //Start the server on the given port
 const port = process.env.PORT;
