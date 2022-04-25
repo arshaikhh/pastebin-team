@@ -46,6 +46,17 @@ app.post("/", async (req,res)=> {
   
 })
 
+app.delete("/:id", async (req,res)=> {
+  try {
+    const input = req.params.id
+    const dbres = await client.query('DELETE FROM categories WHERE id=($1) returning *',[input])
+    res.json(dbres.rows[0])
+  }
+  catch(err) {
+    console.error(err.message)
+  }
+})
+
 //Start the server on the given port
 const port = process.env.PORT;
 if (!port) {
