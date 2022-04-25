@@ -29,7 +29,7 @@ const client = new Client(dbConfig);
 client.connect();
 
 app.get("/", async (req, res) => {
-  const dbres = await client.query('select * from categories');
+  const dbres = await client.query('select * from pasteData limit 10');
   res.json(dbres.rows);
   
 });
@@ -37,7 +37,7 @@ app.get("/", async (req, res) => {
 app.post("/", async (req,res)=> {
   try {
     const input = req.body
-    const dbres = await client.query('insert into categories(name) values($1) returning *',[input.name])
+    const dbres = await client.query('insert into pasteData(title,name,creation_date) values($1,$2,$3) returning *',[input.title,input.name,input.creation_date])
     res.json(dbres.rows[0])
   }
   catch(err) {
@@ -49,7 +49,7 @@ app.post("/", async (req,res)=> {
 app.delete("/:id", async (req,res)=> {
   try {
     const input = req.params.id
-    const dbres = await client.query('DELETE FROM categories WHERE id=($1) returning *',[input])
+    const dbres = await client.query('DELETE FROM pastedata WHERE id=($1) returning *',[input])
     res.json(dbres.rows[0])
   }
   catch(err) {
