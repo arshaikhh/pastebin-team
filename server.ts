@@ -37,7 +37,8 @@ app.get("/", async (req, res) => {
 app.post("/", async (req,res)=> {
   try {
     const input = req.body
-    const dbres = await client.query('insert into pasteData(title,name,creation_date) values($1,$2,$3) returning *',[input.title,input.data,input.creation_date])
+    const dbres = await client.query('insert into pasteData(title,name,creation_date) values($1,$2,$3) returning *',[input.title,input.data,input.creationDate])
+    console.log(input.data)
     res.json(dbres.rows[0])
   }
   catch(err) {
