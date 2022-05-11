@@ -3,8 +3,6 @@ import { config } from "dotenv";
 import express from "express";
 import cors from "cors";
 
-// hello Abdul
-
 config(); //Read .env file lines as though they were env vars.
 
 //Call this script with the environment variable LOCAL set if you want to connect to a local db (i.e. without SSL)
@@ -29,34 +27,10 @@ const client = new Client(dbConfig);
 client.connect();
 
 app.get("/", async (req, res) => {
-  const dbres = await client.query('select * from pastedata limit 10');
+  const dbres = await client.query('select * from categories');
   res.json(dbres.rows);
-  
 });
 
-app.post("/", async (req,res)=> {
-  try {
-    const input = req.body
-    const dbres = await client.query('insert into pastedata(title,data,creation_date) values($1,$2,$3) returning *',[input.title,input.data,input.creationDate])
-    console.log(input.data,input.title,input.creationDate)
-    res.json(dbres.rows[0])
-  }
-  catch(err) {
-    console.error(err.message)
-  }
-  
-})
-
-app.delete("/:id", async (req,res)=> {
-  try {
-    const input = req.params.id
-    const dbres = await client.query('DELETE FROM pastedata WHERE id=($1) returning *',[input])
-    res.json(dbres.rows[0])
-  }
-  catch(err) {
-    console.error(err.message)
-  }
-})
 
 //Start the server on the given port
 const port = process.env.PORT;
